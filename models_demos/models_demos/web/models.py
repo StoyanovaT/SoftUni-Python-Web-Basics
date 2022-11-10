@@ -1,22 +1,43 @@
-from enum import Enum
+import datetime
+from datetime import date
 
 from django.db import models
+from django.urls import reverse
 
 
-# class EmployeeLevel(Enum):
-#     JUNIOR = 'Junior',
-#     REGULAR = 'Regular',
-#     SENIOR = 'Senior'
+class AuditInfoMixin(models.Model):
+    class Meta:
+        # 1. No table will be created in the DB
+        # 2. Can be inherited in other models
+        abstract = True
+
+    created_on = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_on = models.DateTimeField(
+        auto_now=True,
+    )
 
 
-class Department(models.Model):
+class Department(AuditInfoMixin, models.Model):
     name = models.CharField(max_length=15)
+    slug = models.SlugField(
+        unique=True,
+    )
 
     def __str__(self):
         return f'Id: {self.pk}; Name: {self.name}'
 
+    def get_absolute_url(self):
+        url = reverse('details department', kwargs={
+            'pk': self.pk,
+        })
 
-class Project(models.Model):
+        return url
+
+
+class Project(AuditInfoMixin, models.Model):
     name = models.CharField(
         max_length=30,
     )
@@ -25,9 +46,12 @@ class Project(models.Model):
         unique=True,
     )
     deadline = models.DateField()
+pass
 
+class Employee(AuditInfoMixin, models.Model):
+    class Meta:
+        ordering = ('-years_of_experience', 'age')
 
-class Employee(models.Model):
     LEVEL_JUNIOR = 'Junior'
     LEVEL_REGULAR = 'Regular'
     LEVEL_SENIOR = 'Senior'
@@ -65,19 +89,10 @@ class Employee(models.Model):
 
     email = models.EmailField(
         unique=True,
-        editable=False,
     )
 
     is_full_time = models.BooleanField(
         null=True,
-    )
-
-    created_on = models.DateTimeField(
-        auto_now_add=True,
-    )
-
-    updated_on = models.DateTimeField(
-        auto_now=True,
     )
 
     # One to Many
@@ -96,6 +111,10 @@ class Employee(models.Model):
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
+    @property
+    def years_of_employment(self):
+        return date.today() - self.start_date
+
     def __str__(self):
         return f'Id: {self.pk}; Name: {self.full_name}'
 
@@ -109,6 +128,10 @@ class AccessCard(models.Model):
 
 
 class Category(models.Model):
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+
     name = models.CharField(
         max_length=15,
     )

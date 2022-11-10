@@ -9,26 +9,26 @@ class EmployeeAdmin(admin.ModelAdmin):
     list_filter = ('level', 'first_name')
     search_fields = ('first_name', 'last_name')
 
-    fieldsets = (
-        (
-            'Personal Info',
-            {
-                'fields': ('first_name', 'last_name', 'age'),
-            }
-        ),
-        (
-            'Professional Info',
-            {
-                'fields': ('level', 'years_of_experience'),
-            }
-        ),
-        (
-            'Company Info',
-            {
-                'fields': ('department', 'is_full_time', 'start_date')
-            }
-        ),
-    )
+    # fieldsets = (
+    #     (
+    #         'Personal Info',
+    #         {
+    #             'fields': ('first_name', 'last_name', 'age'),
+    #         }
+    #     ),
+    #     (
+    #         'Professional Info',
+    #         {
+    #             'fields': ('level', 'years_of_experience'),
+    #         }
+    #     ),
+    #     (
+    #         'Company Info',
+    #         {
+    #             'fields': ('department', 'is_full_time', 'start_date')
+    #         }
+    #     ),
+    # )
 
 
 @admin.register(Department)
