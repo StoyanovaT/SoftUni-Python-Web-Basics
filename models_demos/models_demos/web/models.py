@@ -32,6 +32,7 @@ class Department(AuditInfoMixin, models.Model):
     def get_absolute_url(self):
         url = reverse('details department', kwargs={
             'pk': self.pk,
+            'slug': self.slug,
         })
 
         return url

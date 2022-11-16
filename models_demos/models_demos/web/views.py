@@ -25,9 +25,9 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def department_details(request, pk):
+def department_details(request, pk, slug):
     context = {
-        'department': get_object_or_404(Department, pk=pk)
+        'department': get_object_or_404(Department, pk=pk, slug=slug)
     }
     return render(request, 'department-details.html', context)
 
