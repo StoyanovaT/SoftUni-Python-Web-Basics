@@ -4,6 +4,8 @@ from datetime import date
 from django.db import models
 from django.urls import reverse
 
+from models_demos.web.validators import validate_in_the_past
+
 
 class AuditInfoMixin(models.Model):
     class Meta:
@@ -78,15 +80,17 @@ class Employee(AuditInfoMixin, models.Model):
         verbose_name='Seniority level',
     )
 
-    age = models.IntegerField(
-        default=-7,
+    age = models.PositiveIntegerField(
+        default=0,
     )
 
     years_of_experience = models.PositiveIntegerField(null=True)
 
     review = models.TextField()
 
-    start_date = models.DateField()
+    start_date = models.DateField(
+        validators=(validate_in_the_past,)
+    )
 
     email = models.EmailField(
         unique=True,
